@@ -1,0 +1,10 @@
+{
+  "name": "ماركت الشوربجي",
+  "short_name": "ماركت الشوربجي",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d6efd",
+  "description": "نظام إدارة ماركت الشوربجي يعمل بدون إنترنت"
+}
