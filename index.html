@@ -1,1 +1,664 @@
-teat
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+<title>ماركت الشوربجي</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+    --blue:#1261d8;
+    --blue2:#0b3d91;
+    --bg:#f4f6fa;
+    --card:#fff;
+    --text:#172033;
+    --muted:#707b8d;
+    --green:#159447;
+    --red:#d93434;
+    --orange:#ed8b18;
+    --border:#e6eaf0;
+}
+
+body{
+    font-family:Tahoma,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding-bottom:88px;
+}
+
+button,input,select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.header{
+    background:linear-gradient(135deg,var(--blue),var(--blue2));
+    color:#fff;
+    padding:22px 18px 25px;
+    border-radius:0 0 26px 26px;
+}
+
+.header h1{
+    font-size:25px;
+    font-weight:800;
+}
+
+.header p{
+    margin-top:6px;
+    font-size:13px;
+    opacity:.9;
+}
+
+.container{
+    width:94%;
+    max-width:650px;
+    margin:16px auto;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.section-title{
+    font-size:19px;
+    font-weight:800;
+    margin:20px 0 12px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:17px;
+    padding:16px;
+    box-shadow:0 3px 14px rgba(0,0,0,.06);
+    margin-bottom:12px;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+}
+
+.summary-card{
+    background:#fff;
+    border-radius:16px;
+    padding:16px 13px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.summary-title{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:8px;
+}
+
+.summary-value{
+    font-size:21px;
+    font-weight:800;
+}
+
+.blue-text{color:var(--blue)}
+.green-text{color:var(--green)}
+.orange-text{color:var(--orange)}
+.red-text{color:var(--red)}
+
+.quick-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+}
+
+.quick-btn{
+    border:0;
+    background:#fff;
+    border-radius:17px;
+    padding:17px 10px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+    font-weight:800;
+    color:var(--text);
+}
+
+.quick-icon{
+    display:block;
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.search-box{
+    position:relative;
+    margin-bottom:12px;
+}
+
+.search-box input{
+    width:100%;
+    border:1px solid var(--border);
+    background:#fff;
+    border-radius:14px;
+    padding:14px 16px;
+    font-size:15px;
+    outline:none;
+}
+
+.search-box input:focus{
+    border-color:var(--blue);
+}
+
+.product-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.product-card{
+    background:#fff;
+    border-radius:16px;
+    padding:14px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.product-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.product-name{
+    font-weight:800;
+    font-size:16px;
+}
+
+.product-qty{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+}
+
+.product-prices{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+
+.price-tag{
+    background:#f1f5fb;
+    padding:6px 9px;
+    border-radius:9px;
+    font-size:12px;
+}
+
+.product-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:7px;
+    margin-top:12px;
+}
+
+.btn{
+    border:0;
+    border-radius:10px;
+    padding:11px 8px;
+    font-weight:800;
+    font-size:13px;
+}
+
+.btn-blue{
+    background:var(--blue);
+    color:#fff;
+}
+
+.btn-green{
+    background:#e9f8ef;
+    color:var(--green);
+}
+
+.btn-red{
+    background:#ffeded;
+    color:var(--red);
+}
+
+.btn-orange{
+    background:#fff2df;
+    color:#b96700;
+}
+
+.btn-gray{
+    background:#eef1f5;
+    color:#4d586a;
+}
+
+.full-btn{
+    width:100%;
+    margin-top:10px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.form-group{
+    margin-bottom:11px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:11px;
+    background:#fff;
+    outline:none;
+    font-size:14px;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:var(--blue);
+}
+
+.sales-cart{
+    margin-top:14px;
+}
+
+.cart-item{
+    background:#fff;
+    border-radius:14px;
+    padding:12px;
+    margin-bottom:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+
+.cart-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+}
+
+.qty-controls{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.qty-btn{
+    width:32px;
+    height:32px;
+    border:0;
+    border-radius:9px;
+    background:#edf2f8;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.empty{
+    text-align:center;
+    color:var(--muted);
+    padding:25px 10px;
+}
+
+.report-row{
+    background:#fff;
+    border-radius:15px;
+    padding:14px;
+    margin-bottom:9px;
+    box-shadow:0 2px 9px rgba(0,0,0,.05);
+}
+
+.report-main{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.report-name{
+    font-weight:800;
+}
+
+.report-date{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:5px;
+}
+
+.report-details{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px solid var(--border);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    font-size:12px;
+}
+
+.notice{
+    background:#eef5ff;
+    color:#164c9f;
+    border-radius:13px;
+    padding:12px;
+    font-size:12px;
+    line-height:1.7;
+    margin-bottom:12px;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.48);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:500;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    background:#fff;
+    width:100%;
+    max-width:650px;
+    max-height:88vh;
+    overflow:auto;
+    border-radius:24px 24px 0 0;
+    padding:20px;
+}
+
+.modal-title{
+    font-size:19px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.modal-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-top:12px;
+}
+
+.bottom-nav{
+    position:fixed;
+    right:0;
+    left:0;
+    bottom:0;
+    height:78px;
+    background:#fff;
+    box-shadow:0 -3px 15px rgba(0,0,0,.10);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    z-index:300;
+    padding-bottom:3px;
+}
+
+.nav-btn{
+    border:0;
+    background:transparent;
+    color:#697386;
+    font-size:10px;
+    font-weight:700;
+}
+
+.nav-btn span{
+    display:block;
+    font-size:22px;
+    margin-bottom:3px;
+}
+
+.nav-btn.active{
+    color:var(--blue);
+}
+
+.toast{
+    position:fixed;
+    bottom:92px;
+    right:50%;
+    transform:translateX(50%) translateY(20px);
+    background:#172033;
+    color:#fff;
+    padding:11px 17px;
+    border-radius:12px;
+    font-size:13px;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    z-index:1000;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(50%) translateY(0);
+}
+
+.month-title{
+    font-size:16px;
+    font-weight:800;
+    background:#edf3ff;
+    color:#174eaa;
+    padding:10px 12px;
+    border-radius:11px;
+    margin:15px 0 9px;
+}
+
+@media(max-width:390px){
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>ماركت الشوربجي</h1>
+    <p>نظام إدارة الماركت</p>
+</header>
+
+<main class="container">
+
+<!-- ================= الرئيسية ================= -->
+
+<section id="homePage" class="page active">
+
+    <div class="card">
+        <strong>أهلاً بك 👋</strong>
+        <p style="font-size:13px;color:#707b8d;margin-top:7px;line-height:1.7">
+            من هنا تقدر تتابع حركة الماركت بالكامل.
+        </p>
+    </div>
+
+    <h2 class="section-title">ملخص اليوم</h2>
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <div class="summary-title">مبيعات اليوم</div>
+            <div class="summary-value blue-text" id="homeSales">0 ج</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">صافي الربح</div>
+            <div class="summary-value green-text" id="homeProfit">0 ج</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">المشتريات</div>
+            <div class="summary-value orange-text" id="homePurchases">0 ج</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">عدد الفواتير</div>
+            <div class="summary-value" id="homeInvoices">0</div>
+        </div>
+
+    </div>
+
+    <h2 class="section-title">اختصارات</h2>
+
+    <div class="quick-grid">
+
+        <button class="quick-btn" onclick="showPage('sales')">
+            <span class="quick-icon">🛒</span>
+            البيع السريع
+        </button>
+
+        <button class="quick-btn" onclick="showPage('inventory')">
+            <span class="quick-icon">📦</span>
+            المخزون
+        </button>
+
+        <button class="quick-btn" onclick="showPage('purchases')">
+            <span class="quick-icon">🧾</span>
+            المشتريات
+        </button>
+
+        <button class="quick-btn" onclick="showPage('reports')">
+            <span class="quick-icon">📊</span>
+            التقارير
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= البيع ================= -->
+
+<section id="salesPage" class="page">
+
+    <h2 class="section-title">البيع السريع</h2>
+
+    <div class="notice">
+        ابحث عن الصنف، حدد الكمية، ثم أضفه إلى الفاتورة.
+        عند تأكيد البيع يتم خصم الكمية تلقائياً وحساب الربح.
+    </div>
+
+    <div class="search-box">
+        <input
+            id="salesSearch"
+            type="text"
+            placeholder="ابحث باسم الصنف..."
+            oninput="renderSalesProducts()"
+        >
+    </div>
+
+    <div id="salesProducts" class="product-list"></div>
+
+    <div class="sales-cart">
+
+        <h2 class="section-title">الفاتورة الحالية</h2>
+
+        <div id="cartList"></div>
+
+        <div class="card" id="cartSummary" style="display:none">
+
+            <div class="cart-row">
+                <span>إجمالي البيع</span>
+                <strong id="cartTotal">0 ج</strong>
+            </div>
+
+            <div class="cart-row" style="margin-top:8px">
+                <span>الربح</span>
+                <strong class="green-text" id="cartProfit">0 ج</strong>
+            </div>
+
+            <button class="btn btn-blue full-btn" onclick="completeSale()">
+                تأكيد البيع
+            </button>
+
+            <button class="btn btn-gray full-btn" onclick="clearCart()">
+                إلغاء الفاتورة
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= المخزون ================= -->
+
+<section id="inventoryPage" class="page">
+
+    <h2 class="section-title">الجرد والمخزون</h2>
+
+    <div class="search-box">
+        <input
+            id="inventorySearch"
+            type="text"
+            placeholder="ابحث عن الصنف..."
+            oninput="renderInventory()"
+        >
+    </div>
+
+    <button class="btn btn-blue full-btn" onclick="openProductModal()">
+        + إضافة صنف جديد
+    </button>
+
+    <div id="inventoryList" class="product-list" style="margin-top:12px"></div>
+
+</section>
+
+
+<!-- ================= المشتريات ================= -->
+
+<section id="purchasesPage" class="page">
+
+    <h2 class="section-title">المشتريات</h2>
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <div class="summary-title">إجمالي المشتريات</div>
+            <div class="summary-value orange-text" id="purchaseTotal">0 ج</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">عدد الفواتير</div>
+            <div class="summary-value" id="purchaseInvoices">0</div>
+        </div>
+
+    </div>
+
+    <div class="card" style="
