@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -6,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
 <title>ماركت الشوربجي</title>
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0d6efd">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
 <style>
 *{
@@ -472,10 +476,6 @@ button{
 }
 
 @media(max-width:390px){
-    .summary-grid{
-        grid-template-columns:1fr 1fr;
-    }
-
     .form-grid{
         grid-template-columns:1fr;
     }
@@ -495,8 +495,6 @@ button{
 </header>
 
 <main class="container">
-
-<!-- ================= الرئيسية ================= -->
 
 <section id="homePage" class="page active">
 
@@ -561,9 +559,6 @@ button{
 
 </section>
 
-
-<!-- ================= البيع ================= -->
-
 <section id="salesPage" class="page">
 
     <h2 class="section-title">البيع السريع</h2>
@@ -574,12 +569,10 @@ button{
     </div>
 
     <div class="search-box">
-        <input
-            id="salesSearch"
-            type="text"
-            placeholder="ابحث باسم الصنف..."
-            oninput="renderSalesProducts()"
-        >
+        <input id="salesSearch"
+               type="text"
+               placeholder="ابحث باسم الصنف..."
+               oninput="renderSalesProducts()">
     </div>
 
     <div id="salesProducts" class="product-list"></div>
@@ -616,20 +609,15 @@ button{
 
 </section>
 
-
-<!-- ================= المخزون ================= -->
-
 <section id="inventoryPage" class="page">
 
     <h2 class="section-title">الجرد والمخزون</h2>
 
     <div class="search-box">
-        <input
-            id="inventorySearch"
-            type="text"
-            placeholder="ابحث عن الصنف..."
-            oninput="renderInventory()"
-        >
+        <input id="inventorySearch"
+               type="text"
+               placeholder="ابحث عن الصنف..."
+               oninput="renderInventory()">
     </div>
 
     <button class="btn btn-blue full-btn" onclick="openProductModal()">
@@ -639,9 +627,6 @@ button{
     <div id="inventoryList" class="product-list" style="margin-top:12px"></div>
 
 </section>
-
-
-<!-- ================= المشتريات ================= -->
 
 <section id="purchasesPage" class="page">
 
@@ -661,4 +646,753 @@ button{
 
     </div>
 
-    <div class="card" style="
+    <div class="card" style="margin-top:12px">
+
+        <h3 style="margin-bottom:14px">إضافة مشتريات</h3>
+
+        <div class="form-group">
+            <label>الصنف</label>
+            <select id="purchaseProduct"></select>
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>الكمية</label>
+                <input id="purchaseQty" type="number" min="1" value="1">
+            </div>
+
+            <div class="form-group">
+                <label>سعر الشراء للوحدة</label>
+                <input id="purchasePrice" type="number" min="0" step="0.01">
+            </div>
+
+            <div class="form-group full">
+                <label>المورد</label>
+                <input id="purchaseSupplier" type="text" placeholder="اسم المورد - اختياري">
+            </div>
+
+        </div>
+
+        <button class="btn btn-orange full-btn" onclick="addPurchase()">
+            إضافة المشتريات
+        </button>
+
+    </div>
+
+    <h2 class="section-title">المصروفات</h2>
+
+    <div class="card">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>اسم المصروف</label>
+                <input id="expenseName" type="text" placeholder="مثال: كهرباء">
+            </div>
+
+            <div class="form-group">
+                <label>المبلغ</label>
+                <input id="expenseAmount" type="number" min="0" step="0.01">
+            </div>
+
+            <div class="form-group full">
+                <label>ملاحظات</label>
+                <input id="expenseNote" type="text" placeholder="اختياري">
+            </div>
+
+        </div>
+
+        <button class="btn btn-red full-btn" onclick="addExpense()">
+            إضافة مصروف
+        </button>
+
+    </div>
+
+    <h2 class="section-title">سجل المشتريات</h2>
+
+    <div id="purchasesList"></div>
+
+    <h2 class="section-title">سجل المصروفات</h2>
+
+    <div id="expensesList"></div>
+
+</section>
+
+<section id="reportsPage" class="page">
+
+    <h2 class="section-title">التقارير</h2>
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <div class="summary-title">مبيعات اليوم</div>
+            <div class="summary-value blue-text" id="reportSales">0 ج</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">ربح اليوم</div>
+            <div class="summary-value green-text" id="reportProfit">0 ج</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">مشتريات اليوم</div>
+            <div class="summary-value orange-text" id="reportPurchases">0 ج</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">مصروفات اليوم</div>
+            <div class="summary-value red-text" id="reportExpenses">0 ج</div>
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top:12px">
+
+        <div class="cart-row">
+            <span>صافي اليوم بعد المصروفات</span>
+            <strong class="green-text" id="reportNet">0 ج</strong>
+        </div>
+
+    </div>
+
+    <h2 class="section-title">التقرير الشهري</h2>
+
+    <div class="card">
+
+        <div class="form-group">
+            <label>اختار الشهر</label>
+            <input id="reportMonth" type="month" onchange="renderReports()">
+        </div>
+
+        <div id="monthlySummary"></div>
+
+    </div>
+
+    <h2 class="section-title">تفاصيل المبيعات</h2>
+
+    <div id="salesReport"></div>
+
+</section>
+
+</main>
+
+<nav class="bottom-nav">
+
+    <button class="nav-btn active" data-page="home" onclick="showPage('home')">
+        <span>🏠</span>
+        الرئيسية
+    </button>
+
+    <button class="nav-btn" data-page="sales" onclick="showPage('sales')">
+        <span>🛒</span>
+        المبيعات
+    </button>
+
+    <button class="nav-btn" data-page="inventory" onclick="showPage('inventory')">
+        <span>📦</span>
+        المخزون
+    </button>
+
+    <button class="nav-btn" data-page="purchases" onclick="showPage('purchases')">
+        <span>🧾</span>
+        المشتريات
+    </button>
+
+    <button class="nav-btn" data-page="reports" onclick="showPage('reports')">
+        <span>📊</span>
+        التقارير
+    </button>
+
+</nav>
+
+<div id="productModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-title" id="productModalTitle">
+            إضافة صنف جديد
+        </div>
+
+        <input type="hidden" id="editProductId">
+
+        <div class="form-group">
+            <label>اسم الصنف</label>
+            <input id="productName" type="text" placeholder="اسم الصنف">
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>سعر الشراء</label>
+                <input id="productBuy" type="number" min="0" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label>سعر البيع</label>
+                <input id="productSell" type="number" min="0" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label>سعر الجملة (اختياري)</label>
+                <input id="productWholesale" type="number" min="0" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label>الكمية الحالية</label>
+                <input id="productQty" type="number" min="0" value="0">
+            </div>
+
+            <div class="form-group full">
+                <label>الباركود (اختياري)</label>
+                <input id="productBarcode" type="text" placeholder="رقم الباركود">
+            </div>
+
+        </div>
+
+        <div class="modal-buttons">
+            <button class="btn btn-blue" onclick="saveProduct()">حفظ الصنف</button>
+            <button class="btn btn-gray" onclick="closeProductModal()">إلغاء</button>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="toast" class="toast">تم بنجاح</div>
+
+<script>
+let db = {
+    products: JSON.parse(localStorage.getItem('shorbagy_products')) || [],
+    sales: JSON.parse(localStorage.getItem('shorbagy_sales')) || [],
+    purchases: JSON.parse(localStorage.getItem('shorbagy_purchases')) || [],
+    expenses: JSON.parse(localStorage.getItem('shorbagy_expenses')) || []
+};
+
+let currentCart = [];
+
+function saveData() {
+    localStorage.setItem('shorbagy_products', JSON.stringify(db.products));
+    localStorage.setItem('shorbagy_sales', JSON.stringify(db.sales));
+    localStorage.setItem('shorbagy_purchases', JSON.stringify(db.purchases));
+    localStorage.setItem('shorbagy_expenses', JSON.stringify(db.expenses));
+}
+
+function showToast(msg) {
+    let t = document.getElementById('toast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+    let targetPage = document.getElementById(pageId + 'Page');
+    if (targetPage) targetPage.classList.add('active');
+
+    let targetBtn = document.querySelector(`.nav-btn[data-page="${pageId}"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+
+    window.scrollTo(0, 0);
+
+    if (pageId === 'home') updateHome();
+    if (pageId === 'sales') { renderSalesProducts(); renderCart(); }
+    if (pageId === 'inventory') renderInventory();
+    if (pageId === 'purchases') { renderPurchaseSelect(); renderPurchasesList(); renderExpensesList(); }
+    if (pageId === 'reports') {
+        let d = new Date();
+        let m = d.toISOString().slice(0, 7);
+        if(!document.getElementById('reportMonth').value) document.getElementById('reportMonth').value = m;
+        renderReports();
+    }
+}
+
+function updateHome() {
+    let today = new Date().toISOString().slice(0, 10);
+    let todaySales = db.sales.filter(s => s.date.startsWith(today));
+    let todayPurchases = db.purchases.filter(p => p.date.startsWith(today));
+
+    let totalSales = todaySales.reduce((acc, s) => acc + s.total, 0);
+    let totalProfit = todaySales.reduce((acc, s) => acc + s.profit, 0);
+    let totalPurchases = todayPurchases.reduce((acc, p) => acc + p.total, 0);
+
+    document.getElementById('homeSales').innerText = totalSales + ' ج';
+    document.getElementById('homeProfit').innerText = totalProfit + ' ج';
+    document.getElementById('homePurchases').innerText = totalPurchases + ' ج';
+    document.getElementById('homeInvoices').innerText = todaySales.length;
+}
+
+function openProductModal(id = null) {
+    document.getElementById('editProductId').value = '';
+    document.getElementById('productName').value = '';
+    document.getElementById('productBuy').value = '';
+    document.getElementById('productSell').value = '';
+    document.getElementById('productWholesale').value = '';
+    document.getElementById('productQty').value = '0';
+    document.getElementById('productBarcode').value = '';
+    document.getElementById('productModalTitle').innerText = 'إضافة صنف جديد';
+
+    if (id) {
+        let p = db.products.find(x => x.id == id);
+        if (p) {
+            document.getElementById('editProductId').value = p.id;
+            document.getElementById('productName').value = p.name;
+            document.getElementById('productBuy').value = p.buyPrice;
+            document.getElementById('productSell').value = p.sellPrice;
+            document.getElementById('productWholesale').value = p.wholesalePrice || '';
+            document.getElementById('productQty').value = p.qty;
+            document.getElementById('productBarcode').value = p.barcode || '';
+            document.getElementById('productModalTitle').innerText = 'تعديل الصنف';
+        }
+    }
+    document.getElementById('productModal').classList.add('show');
+}
+
+function closeProductModal() {
+    document.getElementById('productModal').classList.remove('show');
+}
+
+function saveProduct() {
+    let id = document.getElementById('editProductId').value;
+    let name = document.getElementById('productName').value.trim();
+    let buyPrice = parseFloat(document.getElementById('productBuy').value) || 0;
+    let sellPrice = parseFloat(document.getElementById('productSell').value) || 0;
+    let wholesalePrice = parseFloat(document.getElementById('productWholesale').value) || 0;
+    let qty = parseInt(document.getElementById('productQty').value) || 0;
+    let barcode = document.getElementById('productBarcode').value.trim();
+
+    if (!name) {
+        alert('أدخل اسم الصنف من فضلك');
+        return;
+    }
+
+    if (id) {
+        let p = db.products.find(x => x.id == id);
+        if (p) {
+            p.name = name;
+            p.buyPrice = buyPrice;
+            p.sellPrice = sellPrice;
+            p.wholesalePrice = wholesalePrice;
+            p.qty = qty;
+            p.barcode = barcode;
+        }
+    } else {
+        let newP = {
+            id: Date.now(),
+            name,
+            buyPrice,
+            sellPrice,
+            wholesalePrice,
+            qty,
+            barcode
+        };
+        db.products.push(newP);
+    }
+
+    saveData();
+    closeProductModal();
+    renderInventory();
+    showToast('تم حفظ الصنف بنجاح');
+}
+
+function renderInventory() {
+    let search = document.getElementById('inventorySearch').value.toLowerCase();
+    let list = document.getElementById('inventoryList');
+    list.innerHTML = '';
+
+    let filtered = db.products.filter(p => p.name.toLowerCase().includes(search) || (p.barcode && p.barcode.includes(search)));
+
+    if (filtered.length === 0) {
+        list.innerHTML = `<div class="empty">لا توجد أصناف مطابقة</div>`;
+        return;
+    }
+
+    filtered.forEach(p => {
+        let card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <div class="product-top">
+                <div class="product-name">${p.name}</div>
+                <div class="product-qty">المخزون: ${p.qty}</div>
+            </div>
+            <div class="product-prices">
+                <span class="price-tag">شراء: ${p.buyPrice} ج</span>
+                <span class="price-tag">بيع: ${p.sellPrice} ج</span>
+                ${p.wholesalePrice ? `<span class="price-tag">جملة: ${p.wholesalePrice} ج</span>` : ''}
+            </div>
+            <div class="product-actions">
+                <button class="btn btn-blue" onclick="openProductModal(${p.id})">تعديل</button>
+                <button class="btn btn-red" onclick="deleteProduct(${p.id})">حذف</button>
+            </div>
+        `;
+        list.appendChild(card);
+    });
+}
+
+function deleteProduct(id) {
+    if (confirm('هل أنت متأكد من حذف هذا الصنف؟')) {
+        db.products = db.products.filter(p => p.id != id);
+        saveData();
+        renderInventory();
+        showToast('تم الحذف');
+    }
+}
+
+function renderSalesProducts() {
+    let search = document.getElementById('salesSearch').value.toLowerCase();
+    let container = document.getElementById('salesProducts');
+    container.innerHTML = '';
+
+    let filtered = db.products.filter(p => p.name.toLowerCase().includes(search));
+
+    if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty">لا توجد أصناف</div>`;
+        return;
+    }
+
+    filtered.forEach(p => {
+        let card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <div class="product-top">
+                <div class="product-name">${p.name}</div>
+                <div class="product-qty">متاح: ${p.qty}</div>
+            </div>
+            <div class="product-prices">
+                <span class="price-tag">السعر: ${p.sellPrice} ج</span>
+            </div>
+            <button class="btn btn-blue full-btn" onclick="addToCart(${p.id})">إضافة للفاتورة</button>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function addToCart(id) {
+    let product = db.products.find(p => p.id == id);
+    if (!product) return;
+
+    let cartItem = currentCart.find(i => i.id == id);
+    if (cartItem) {
+        if (cartItem.qty + 1 > product.qty) {
+            alert('الكمية المتاحة في المخزون غير كافية!');
+            return;
+        }
+        cartItem.qty++;
+    } else {
+        if (product.qty < 1) {
+            alert('الصنف غير متوفر في المخزون!');
+            return;
+        }
+        currentCart.push({
+            id: product.id,
+            name: product.name,
+            buyPrice: product.buyPrice,
+            price: product.sellPrice,
+            qty: 1
+        });
+    }
+    renderCart();
+}
+
+function changeCartQty(id, delta) {
+    let item = currentCart.find(i => i.id == id);
+    let product = db.products.find(p => p.id == id);
+    if (!item) return;
+
+    let newQty = item.qty + delta;
+    if (newQty > product.qty) {
+        alert('الكمية المتاحة غير كافية!');
+        return;
+    }
+
+    if (newQty <= 0) {
+        currentCart = currentCart.filter(i => i.id != id);
+    } else {
+        item.qty = newQty;
+    }
+    renderCart();
+}
+
+function renderCart() {
+    let list = document.getElementById('cartList');
+    let summary = document.getElementById('cartSummary');
+    list.innerHTML = '';
+
+    if (currentCart.length === 0) {
+        summary.style.display = 'none';
+        list.innerHTML = `<div class="empty">الفاتورة فارغة</div>`;
+        return;
+    }
+
+    summary.style.display = 'block';
+    let total = 0;
+    let profit = 0;
+
+    currentCart.forEach(item => {
+        let itemTotal = item.price * item.qty;
+        let itemProfit = (item.price - item.buyPrice) * item.qty;
+        total += itemTotal;
+        profit += itemProfit;
+
+        let div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+            <div class="cart-row">
+                <strong>${item.name}</strong>
+                <span>${itemTotal} ج</span>
+            </div>
+            <div class="cart-row" style="margin-top:8px">
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="changeCartQty(${item.id}, -1)">-</button>
+                    <span>${item.qty}</span>
+                    <button class="qty-btn" onclick="changeCartQty(${item.id}, 1)">+</button>
+                </div>
+                <span style="font-size:12px;color:var(--muted)">ربح: ${itemProfit} ج</span>
+            </div>
+        `;
+        list.appendChild(div);
+    });
+
+    document.getElementById('cartTotal').innerText = total + ' ج';
+    document.getElementById('cartProfit').innerText = profit + ' ج';
+}
+
+function clearCart() {
+    currentCart = [];
+    renderCart();
+}
+
+function completeSale() {
+    if (currentCart.length === 0) return;
+
+    let total = currentCart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    let profit = currentCart.reduce((sum, i) => sum + ((i.price - i.buyPrice) * i.qty), 0);
+
+    currentCart.forEach(item => {
+        let p = db.products.find(x => x.id == item.id);
+        if (p) p.qty -= item.qty;
+    });
+
+    let saleRecord = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        items: [...currentCart],
+        total,
+        profit
+    };
+
+    db.sales.push(saleRecord);
+    saveData();
+    currentCart = [];
+    renderCart();
+    renderSalesProducts();
+    showToast('تم إتمام البيع بنجاح');
+}
+
+function renderPurchaseSelect() {
+    let select = document.getElementById('purchaseProduct');
+    select.innerHTML = '';
+    db.products.forEach(p => {
+        let opt = document.createElement('option');
+        opt.value = p.id;
+        opt.innerText = p.name + ` (شراء حالي: ${p.buyPrice})`;
+        select.appendChild(opt);
+    });
+}
+
+function addPurchase() {
+    let productId = document.getElementById('purchaseProduct').value;
+    let qty = parseInt(document.getElementById('purchaseQty').value) || 0;
+    let price = parseFloat(document.getElementById('purchasePrice').value) || 0;
+    let supplier = document.getElementById('purchaseSupplier').value.trim();
+
+    if (!productId || qty <= 0 || price < 0) {
+        alert('أدخل بيانات صحيحة للمشتريات');
+        return;
+    }
+
+    let p = db.products.find(x => x.id == productId);
+    if (!p) return;
+
+    p.qty += qty;
+    p.buyPrice = price;
+
+    let purchaseRecord = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        productName: p.name,
+        qty,
+        price,
+        total: qty * price,
+        supplier
+    };
+
+    db.purchases.push(purchaseRecord);
+    saveData();
+
+    document.getElementById('purchaseQty').value = '1';
+    document.getElementById('purchasePrice').value = '';
+    document.getElementById('purchaseSupplier').value = '';
+
+    renderPurchasesList();
+    showToast('تمت إضافة المشتريات وتحديث المخزون');
+}
+
+function renderPurchasesList() {
+    let totalPurchases = db.purchases.reduce((acc, p) => acc + p.total, 0);
+    document.getElementById('purchaseTotal').innerText = totalPurchases + ' ج';
+    document.getElementById('purchaseInvoices').innerText = db.purchases.length;
+
+    let list = document.getElementById('purchasesList');
+    list.innerHTML = '';
+
+    if (db.purchases.length === 0) {
+        list.innerHTML = `<div class="empty">لا توجد مشتريات مسجلة</div>`;
+        return;
+    }
+
+    [...db.purchases].reverse().forEach(p => {
+        let d = new Date(p.date).toLocaleString('ar-EG');
+        let div = document.createElement('div');
+        div.className = 'report-row';
+        div.innerHTML = `
+            <div class="report-main">
+                <div>
+                    <div class="report-name">${p.productName} (${p.qty} وحدة)</div>
+                    <div class="report-date">${d} ${p.supplier ? '- المورد: ' + p.supplier : ''}</div>
+                </div>
+                <strong class="orange-text">${p.total} ج</strong>
+            </div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function addExpense() {
+    let name = document.getElementById('expenseName').value.trim();
+    let amount = parseFloat(document.getElementById('expenseAmount').value) || 0;
+    let note = document.getElementById('expenseNote').value.trim();
+
+    if (!name || amount <= 0) {
+        alert('أدخل اسم المصروف والمبلغ بشكل صحيح');
+        return;
+    }
+
+    let exp = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        name,
+        amount,
+        note
+    };
+
+    db.expenses.push(exp);
+    saveData();
+
+    document.getElementById('expenseName').value = '';
+    document.getElementById('expenseAmount').value = '';
+    document.getElementById('expenseNote').value = '';
+
+    renderExpensesList();
+    showToast('تم تسجيل المصروف');
+}
+
+function renderExpensesList() {
+    let list = document.getElementById('expensesList');
+    list.innerHTML = '';
+
+    if (db.expenses.length === 0) {
+        list.innerHTML = `<div class="empty">لا توجد مصروفات مسجلة</div>`;
+        return;
+    }
+
+    [...db.expenses].reverse().forEach(e => {
+        let d = new Date(e.date).toLocaleString('ar-EG');
+        let div = document.createElement('div');
+        div.className = 'report-row';
+        div.innerHTML = `
+            <div class="report-main">
+                <div>
+                    <div class="report-name">${e.name} ${e.note ? '(' + e.note + ')' : ''}</div>
+                    <div class="report-date">${d}</div>
+                </div>
+                <strong class="red-text">${e.amount} ج</strong>
+            </div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function renderReports() {
+    let today = new Date().toISOString().slice(0, 10);
+    let todaySales = db.sales.filter(s => s.date.startsWith(today));
+    let todayPurchases = db.purchases.filter(p => p.date.startsWith(today));
+    let todayExpenses = db.expenses.filter(e => e.date.startsWith(today));
+
+    let tSales = todaySales.reduce((acc, s) => acc + s.total, 0);
+    let tProfit = todaySales.reduce((acc, s) => acc + s.profit, 0);
+    let tPurchases = todayPurchases.reduce((acc, p) => acc + p.total, 0);
+    let tExpenses = todayExpenses.reduce((acc, e) => acc + e.amount, 0);
+    let netToday = tProfit - tExpenses;
+
+    document.getElementById('reportSales').innerText = tSales + ' ج';
+    document.getElementById('reportProfit').innerText = tProfit + ' ج';
+    document.getElementById('reportPurchases').innerText = tPurchases + ' ج';
+    document.getElementById('reportExpenses').innerText = tExpenses + ' ج';
+    document.getElementById('reportNet').innerText = netToday + ' ج';
+
+    let monthInput = document.getElementById('reportMonth').value;
+    let mSales = 0, mProfit = 0, mPurchases = 0, mExpenses = 0;
+
+    if (monthInput) {
+        mSales = db.sales.filter(s => s.date.startsWith(monthInput)).reduce((acc, s) => acc + s.total, 0);
+        mProfit = db.sales.filter(s => s.date.startsWith(monthInput)).reduce((acc, s) => acc + s.profit, 0);
+        mPurchases = db.purchases.filter(p => p.date.startsWith(monthInput)).reduce((acc, p) => acc + p.total, 0);
+        mExpenses = db.expenses.filter(e => e.date.startsWith(monthInput)).reduce((acc, e) => acc + e.amount, 0);
+    }
+
+    document.getElementById('monthlySummary').innerHTML = `
+        <div class="cart-row" style="margin-top:10px"><span>مبيعات الشهر</span><strong>${mSales} ج</strong></div>
+        <div class="cart-row" style="margin-top:8px"><span>أرباح الشهر</span><strong class="green-text">${mProfit} ج</strong></div>
+        <div class="cart-row" style="margin-top:8px"><span>مشتريات الشهر</span><strong class="orange-text">${mPurchases} ج</strong></div>
+        <div class="cart-row" style="margin-top:8px"><span>مصروفات الشهر</span><strong class="red-text">${mExpenses} ج</strong></div>
+        <div class="cart-row" style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">
+            <span>صافي الشهر</span><strong class="green-text">${mProfit - mExpenses} ج</strong>
+        </div>
+    `;
+
+    let salesReport = document.getElementById('salesReport');
+    salesReport.innerHTML = '';
+    if (db.sales.length === 0) {
+        salesReport.innerHTML = `<div class="empty">لا توجد مبيعات مسجلة</div>`;
+        return;
+    }
+
+    [...db.sales].reverse().slice(0, 10).forEach(s => {
+        let d = new Date(s.date).toLocaleString('ar-EG');
+        let itemsStr = s.items.map(i => `${i.name} (${i.qty})`).join(', ');
+        let div = document.createElement('div');
+        div.className = 'report-row';
+        div.innerHTML = `
+            <div class="report-main">
+                <div>
+                    <div class="report-name">فاتورة (${s.items.length} أصناف)</div>
+                    <div class="report-date">${d} - الأصناف: ${itemsStr}</div>
+                </div>
+                <div style="text-align:left">
+                    <strong class="blue-text">${s.total} ج</strong>
+                    <div style="font-size:11px;color:var(--green)">ربح: ${s.profit} ج</div>
+                </div>
+            </div>
+        `;
+        salesReport.appendChild(div);
+    });
+}
+
+updateHome();
+</script>
+
+</body>
+</html>
